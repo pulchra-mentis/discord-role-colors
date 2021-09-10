@@ -1,8 +1,5 @@
 import Head from 'next/head'
 import { useState } from 'react'
-// import Image from 'next/image'
-// import styles from '../styles/Home.module.css'
-// import iro from '@jaames/iro'
 import Color from 'color'
 import { SketchPicker } from 'react-color'
 
