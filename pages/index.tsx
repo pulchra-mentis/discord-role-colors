@@ -1,7 +1,8 @@
 import Head from 'next/head'
 import { useState } from 'react'
 import Color from 'color'
-import { SketchPicker } from 'react-color'
+import { ChromePicker } from 'react-color'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 enum ContrastGrade {
   Excellent = 'Great',
@@ -34,7 +35,7 @@ const gradeContrast = (contrast: number): ContrastGrade => {
 
 export default function Home() {
   let roles: RoleEntry[] = [
-    { color: '#992D22', title: 'Test', },
+    { color: '#ffffff', title: 'Test', },
   ]
 
   roles.forEach((entry: RoleEntry) => {
@@ -85,23 +86,35 @@ export default function Home() {
         <meta name="description" content="Check the quality of your Discord roles' color contrast against light or dark mode backgrounds" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className='grid grid-cols-3 gap-4 mx-auto px-4'>
-        <SketchPicker
-          color={ role.color }
-          onChange={ handleColorChange }
-          disableAlpha={ true }
-          presetColors={ roleEntries.map((entry: RoleEntry) => entry.color) }
-          width={ 300 }
-          className='mx-auto h-auto px-4'
-        />
-        <div className='mx-auto h-auto px-4'>{ role.contrastGrade ?? ContrastGrade.Poor } ({ role.contrast ?? 0 })</div>
-        <div className='mx-auto px-4 grid grid-rows-4'>
-          <textarea
-            className='mx-auto w-full h-full px-4 row-span-3'
-            value={ roleEntriesStringified }
-            onChange={ handleTextAreaChange }
+      <main className='container mx-auto px-6'>
+        <div className='grid grid-cols-3 gap-4 mx-auto px-4'>
+          <ChromePicker
+            color={ role.color }
+            onChange={ handleColorChange }
+            onChangeComplete={ handleColorChangeComplete }
+            disableAlpha={ true }
+            width={ 300 }
+            className='mx-auto h-auto px-4'
           />
-          <button className='mx-auto w-auto px-4' onClick={ handleRerenderSwatchesClick }>Re-Render Swatches</button>
+          <div className='mx-auto h-auto px-4'>{ role.contrastGrade ?? ContrastGrade.Poor } ({ role.contrast ?? 0 })</div>
+          <div className='mx-auto px-4 p-4'>
+            <ol>
+              { roleEntries.map((entry, index) => <li>
+                <button className='border-4 rounded' onClick={ handleEntryClick(index) }>
+                  <FontAwesomeIcon icon='square' color={ roleEntries[index].color } size='lg' />
+                  { roleEntries[index].contrastGrade ?? ContrastGrade.Poor } ({ roleEntries[index].contrast ?? 0 })
+                </button>
+                <input type='text' value={ roleEntries[index].color } />
+                <input type='text' value={ roleEntries[index].title } />
+              </li>) }
+            </ol>
+            {/* <textarea
+              className='mx-auto w-full h-full px-4 row-span-3'
+              value={ roleEntriesStringified }
+              onChange={ handleTextAreaChange }
+            /> */}
+            <button className='mx-auto w-auto px-4' onClick={ handleUpdateGradesClick }>Re-Render Swatches</button>
+          </div>
         </div>
       </main>
     </div>
